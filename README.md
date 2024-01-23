@@ -5,10 +5,10 @@ A small quality-of-life utility to calculate optimal resource pools utilization,
 
 
 ### Features:
-- 🖥 vCPU\vRAM Pool Calculator (Get optimal sized pools from vCPU and vRAM) 
+- 🖥 vCPU\vRAM Pool Calculator (Get optimal sized pools from vCPU and vRAM)
 - 📦 Pool Calculator (Get vCPU and vRAM from number of pools) 
 - 🐋 Container ready
-- 🌙 Dark mode 
+- 🌙 Dark mode
 
 ### How to run:
 Just run the following:

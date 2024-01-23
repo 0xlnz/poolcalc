@@ -1,0 +1,11 @@
+version: '3'
+services:
+  psncalc:
+    container_name: poolcalc
+    build:
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "5000:5000/tcp"
+    environment:
+      - TZ=Europe/Rome

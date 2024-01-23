@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pool Calculator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="container">
+        <h1 class="mt-5">📦 Pool Calculator</h1>
+        <form id="packageForm" class="mt-5">
+            <div class="row">
+            {% for package_name in packages|reverse %}
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label for="{{ package_name }}">{{ package_name }} <small>(vCPU: {{ packages[package_name].vcpu }}, RAM: {{ packages[package_name].ram }})</small></label>
+                        <input type="number" class="form-control" id="{{ package_name }}" name="{{ package_name }}" min="0" value="0" style="width: 200px;" required >
+                    </div>
+                </div>
+                {% if loop.index is divisibleby 2 %}
+                </div><div class="row">
+                {% endif %}
+            {% endfor %}
+            </div>
+            <button type="submit" class="btn btn-primary">Calculate</button>
+        </form>
+        <ul id="result" class="list-group mt-3"></ul>
+    </div>
+    <script>
+$(document).ready(function(){
+    var urlParams = new URLSearchParams(window.location.search);
+    urlParams.forEach(function(value, key){
+        var input = document.getElementById(key);
+        if(input) input.value = value;
+    }); 
+        $("#packageForm").submit(function(e){
+            e.preventDefault();
+            $.ajax({
+                url: '/package_calculator',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify($(this).serializeArray().reduce(function(a, x) { a[x.name] = x.value; return a; }, {})),
+                success: function(response){
+                    var result = $("#result");
+                    result.empty();
+                    result.append('<li class="list-group-item"><strong>Total vCPU: ' + response.total_vcpu + '</strong></li>');
+                    result.append('<li class="list-group-item"><strong>Total RAM: ' + response.total_ram + '</strong></li>');
+                }
+            });
+
+            $("#refineCalculation").show().click(function(){
+            var total_vcpu = $("#result li:first-child").text().split(": ")[1];
+            var total_ram = $("#result li:nth-child(2)").text().split(": ")[1];
+            window.location.href = '/?total_vcpu=' + total_vcpu + '&total_ram=' + total_ram;
+            });
+        });
+    });
+    </script>
+
+<div id="result" class="container">
+    <button id="refineCalculation" class="btn btn-secondary mt-2" style="display: none;" > <-- Refine Calculation</button>
+</div>
+
+</body>
+</html>
