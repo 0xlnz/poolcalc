@@ -21,4 +21,15 @@ window.addEventListener('load', () => {
             localStorage.removeItem('darkSwitch');
         }
     };
+    changeLabel()
 });
+
+function changeLabel() {
+    var checkbox = document.getElementById('darkSwitch');
+    var label = document.querySelector('label[for="darkSwitch"]');
+    if (checkbox.checked) {
+        label.innerHTML = '🌙'; // Moon emoji when dark mode is on
+    } else {
+        label.innerHTML = '☀️'; // Sun  emoji when dark mode is off
+    }
+}
